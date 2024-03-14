@@ -1,10 +1,12 @@
 const express = require('express');
 const { Sequelize, DataTypes } = require('sequelize');
+const CORS = require('cors');
 
 const app = express();
 const PORT = 1337;
 
 app.use(express.json());
+app.use(CORS());
 
   const quoteData = [
     { id: 0, quote: "The only way to do great work is to love what you do. - Steve Jobs" },
