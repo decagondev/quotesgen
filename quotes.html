@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
+    <title>Quote Generator - Quotes</title>
+</head>
+<body>
+    <header>
+        <h1>Quote Generator</h1>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="quotes.html">Quotes</a>
+        </nav>
+    </header>
+    <main>
+        <h2>Quotes</h2>
+        <div id="quotes-container"></div>
+        <form id="quote-form">
+            <h3>Create or Update Quote</h3>
+            <input type="hidden" id="quote-id">
+            <textarea id="quote-text" placeholder="Enter a Quote" cols="30" rows="10"></textarea>
+            <button type="submit" id="save-quote">Save</button>
+        </form>
+    </main>
+</body>
+</html>
