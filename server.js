@@ -31,6 +31,13 @@ const Quote = sequelize.define('Quote', {
         type: DataTypes.STRING,
         allowNull: false
     }
+}, {
+    timestamps: false
+}
+);
+
+sequelize.sync().then(() => {
+    console.log('Database synced!');
 });
 
 // GET /
@@ -57,6 +64,8 @@ app.post('/quotes', async (req, res) => {
         const newQuote = await Quote.create({ quote });
         res.status(201).json(newQuote);
     } catch (err) {
+        console.log('SQL:', err.query);
+        console.log('Error:', err.message);
         res.status(500).json({ error: err.message });
     }
 })
