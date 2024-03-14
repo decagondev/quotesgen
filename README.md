@@ -6,7 +6,7 @@ This is a Application that can generate random quotes.
 - Sequelize
 - SQLite3
 
-## Front-Ed Stack
+## Front-End Stack
 - HTML
 - CSS
 - JS
