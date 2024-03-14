@@ -51,6 +51,15 @@ app.get('/quotes/random', (req, res) => {
 })
 
 // POST a new quote
+app.post('/quotes', async (req, res) => {
+    const { quote } = req.body;
+    try {
+        const newQuote = await Quote.create({ quote });
+        res.status(201).json(newQuote);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+})
 
 // PUT (update) a quote
 
