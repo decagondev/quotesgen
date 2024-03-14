@@ -2,6 +2,22 @@ const API_URL = 'http://localhost:1337/quotes';
 
 async function fetchAllQuotes() {
     const response = await fetch(API_URL);
+    const quotes = await response.json();
+    const quotesContainer = document.querySelector('#quotes-container');
+    quotesContainer.innerHTML = '';
+
+    quotes.forEach(quote => {
+        const quoteElement = document.createElement('div');
+        quoteElement.classList.add('quote');
+
+        const quoteText = document.createElement('p');
+        quoteText.classList.add('quote-text');
+
+        quoteText.textContent = quote.quote;
+        quoteElement.appendChild(quoteText);
+
+        quotesContainer.appendChild(quoteElement);
+    });    
 }
 
 async function getRandomQuote() {
@@ -51,5 +67,5 @@ async function saveQuote(event) {
     }
 }
 
-
+window.addEventListener('load', fetchAllQuotes);
 document.querySelector('#quote-form').addEventListener('submit', saveQuote);
