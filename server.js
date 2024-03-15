@@ -8,69 +8,79 @@ const PORT = 1337;
 app.use(express.json());
 app.use(CORS());
 
-
 const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: 'quotes.db'
+  dialect: 'sqlite',
+  storage: 'quotes.sqlite',
 });
 
 const Quote = sequelize.define('Quote', {
-    quote: {
-        type: DataTypes.STRING,
-        allowNull: false
-    }
-}, {
-    timestamps: false
-}
-);
-
-sequelize.sync().then(() => {
-    console.log('Database synced!');
+  quote: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 });
 
-// GET /
-app.get('/', (req, res) => {
-    res.json({message: "time2code"});
-})
+sequelize.sync().then(() => {
+  console.log('Database synced');
+});
 
-// GET all quotes
 app.get('/quotes', async (req, res) => {
-    try {
-        const quotes = await Quote.findAll();
-        res.json(quotes);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-})
+  try {
+    const quotes = await Quote.findAll();
+    res.json(quotes);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
-// GET a random quote
 app.get('/quotes/random', async (req, res) => {
-    try {
-        const quote = await Quote.findOne({ order: Sequelize.literal('random()') });
-        res.json(quote);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-})
+  try {
+    const quote = await Quote.findOne({ order: Sequelize.literal('random()') });
+    res.json(quote);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
-// POST a new quote
 app.post('/quotes', async (req, res) => {
-    const { quote } = req.body;
-    try {
-        const newQuote = await Quote.create({ quote });
-        res.status(201).json(newQuote);
-    } catch (err) {
-        console.log('SQL:', err.query);
-        console.log('Error:', err.message);
-        res.status(500).json({ error: err.message });
+  const { quote } = req.body;
+  try {
+    const newQuote = await Quote.create({ quote });
+    res.status(201).json(newQuote);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.put('/quotes/:id', async (req, res) => {
+  const { id } = req.params;
+  const { quote } = req.body;
+  try {
+    const updatedQuote = await Quote.update({ quote }, { where: { id } });
+    if (updatedQuote[0] === 0) {
+      res.status(404).json({ error: 'Quote not found' });
+    } else {
+      res.json({ message: 'Quote updated' });
     }
-})
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
-// PUT (update) a quote
-
-// DELETE a quote
-
+app.delete('/quotes/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deletedQuote = await Quote.destroy({ where: { id } });
+    if (deletedQuote === 0) {
+      res.status(404).json({ error: 'Quote not found' });
+    } else {
+      res.json({ message: 'Quote deleted' });
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-})
+  console.log(`Server running on http://localhost:${PORT}`);
+});
